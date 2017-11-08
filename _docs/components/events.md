@@ -90,3 +90,40 @@ event(New UserEmailChangedEvent($user));
 ## Queueing an Event
 
 Events can implement `Illuminate\Contracts\Queue\ShouldQueue` to be queued.
+
+### EventHandling
+Instead of defining a listener for an event apiato also supports handling from inside the Event component.
+
+To do this you must implement `Apiato\Core\Abstracts\Events\Interfaces\ShouldHandleNow` for instant handling or `Apiato\Core\Abstracts\Events\Interfaces\ShouldHandle` for handling with the queue driver.
+These interfaces will force you to implement the handle method.
+
+Example:
+
+```php
+<?php
+
+namespace App\Containers\Example\Events;
+
+use Apiato\Core\Abstracts\Events\Event;
+use Apiato\Core\Abstracts\Events\Interfaces\ShouldHandle;
+/**
+ * Class ExampleEvent
+ */
+class ExampleEvent extends Event implements ShouldHandle
+{
+    public $jobDelay = 60;
+    public $jobQueue = 'queue-name';
+    
+    /**
+     * ExampleEvent constructor.
+     */
+    public function __construct()
+    {
+    }
+    
+    public function handle()
+    {
+        //do you handling here;
+    }
+}
+```
